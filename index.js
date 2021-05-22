@@ -75,11 +75,11 @@ app.get('/queue/:userId',async (req,res)=>{
     }
 });
 
-//getting specific song from user queue
-app.get('/queue?userId={userId}&songId={songId}',async (req,res)=>{
+
+app.get('/queue',async (req,res)=>{
     try {
-        const {userId,songId}=req.params;
-        const song = await pool.query("SELECT * FROM queue WHERE (user_id = $1 && song_id = $2);" ,[userId , songId] );
+        const {user_id,song_id}=req.body;
+        const song = await pool.query("SELECT * FROM queue WHERE (user_id = $1 AND song_id = $2);" ,[user_id, song_id] );
         res.json(song.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -98,10 +98,10 @@ app.post('/queue',async (req,res)=>{
 });
 
 //deleting single specific song from queue
-app.delete('/queue?userId={userId}&songId={songId}',async (req,res)=>{
+app.delete('/queue',async (req,res)=>{
     try {
-        const {userId,songId}=req.params;
-        const delSong = await pool.query("DELETE FROM queue WHERE (user_id = $1 && song_id = $2) RETURNING *;" ,[userId , songId] );
+        const {user_id,song_id}=req.body;
+        const delSong = await pool.query("DELETE FROM queue WHERE (user_id = $1 AND song_id = $2) RETURNING *;" ,[user_id , song_id] );
         res.json(delSong.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -135,10 +135,10 @@ app.get('/liked/:userId',async (req,res)=>{
 });
 
 //getting specific song from user liked
-app.get('/liked?userId={userId}&songId={songId}',async (req,res)=>{
+app.get('/liked',async (req,res)=>{
     try {
-        const {userId,songId}=req.params;
-        const song = await pool.query("SELECT * FROM liked WHERE (user_id = $1 && song_id = $2);" ,[userId , songId] );
+        const {user_id,song_id}=req.body;
+        const song = await pool.query("SELECT * FROM liked WHERE (user_id = $1 AND song_id = $2);" ,[user_id , song_id] );
         res.json(song.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -157,10 +157,10 @@ app.post('/liked',async (req,res)=>{
 });
 
 //deleting single specific song from liked
-app.delete('/liked?userId={userId}&songId={songId}',async (req,res)=>{
+app.delete('/liked',async (req,res)=>{
     try {
-        const {userId,songId}=req.params;
-        const delSong = await pool.query("DELETE FROM liked WHERE (user_id = $1 && song_id = $2) RETURNING *;" ,[userId , songId] );
+        const {user_id,song_id}=req.body;
+        const delSong = await pool.query("DELETE FROM liked WHERE (user_id = $1 AND song_id = $2) RETURNING *;" ,[user_id , song_id] );
         res.json(delSong.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -183,21 +183,21 @@ app.delete('/liked/:userId',async (req,res)=>{
 //playlist 
 
 //getting full specific  playlist of a user
-app.get('/playlist?userId={userId}&playlist={playlist}',async (req,res)=>{
+app.get('/playlist/full',async (req,res)=>{
     try {
-        const {userId,playlist}=req.params;
-        const liked = await pool.query("SELECT * FROM playlist WHERE (user_id = $1 && playlist_number=$2);" ,[userId,playlist] );
-        res.json(liked.rows);
+        const {user_id,playlist_number}=req.body;
+        const playlist = await pool.query("SELECT * FROM playlist WHERE (user_id = $1 AND playlist_number=$2);" ,[user_id,playlist_number] );
+        res.json(playlist.rows);
     } catch (err) {
         console.error(err.message);
     }
 });
 
 //getting specific song from specific playlist of a user
-app.get('/playlist?userId={userId}&playlist={playlist}&songId={songId}',async (req,res)=>{
+app.get('/playlist',async (req,res)=>{
     try {
-        const {userId,playlist,songId}=req.params;
-        const song = await pool.query("SELECT * FROM playlist WHERE (user_id = $1 && song_id = $2 && playlist_number=$3);" ,[userId , songId, playlist] );
+        const {user_id,playlist_number,song_id}=req.body;
+        const song = await pool.query("SELECT * FROM playlist WHERE (user_id = $1 AND song_id = $2 AND playlist_number=$3);" ,[user_id , song_id, playlist_number] );
         res.json(song.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -216,10 +216,10 @@ app.post('/playlist',async (req,res)=>{
 });
 
 //deleting single specific song from a specific playlist
-app.delete('/playlist?userId={userId}&playlist={playlist}&songId={songId}',async (req,res)=>{
+app.delete('/playlist',async (req,res)=>{
     try {
-        const {userId,playlist,songId}=req.params;
-        const delSong = await pool.query("DELETE FROM playlist WHERE (user_id = $1 && song_id = $2 && playlist_number=$3) RETURNING *;" ,[userId , songId, playlist] );
+        const {user_id,playlist_number,song_id}=req.body;
+        const delSong = await pool.query("DELETE FROM playlist WHERE (user_id = $1 AND song_id = $2 AND playlist_number=$3) RETURNING *;" ,[user_id , song_id, playlist_number] );
         res.json(delSong.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -227,10 +227,10 @@ app.delete('/playlist?userId={userId}&playlist={playlist}&songId={songId}',async
 });
 
 //deleting entire specific playlist
-app.delete('/playlist/userId={userId}&playlist={playlist}',async (req,res)=>{
+app.delete('/playlist/full',async (req,res)=>{
     try {
-        const {userId,playlist}=req.params;
-        const delPlaylist = await pool.query("DELETE FROM playlist WHERE (user_id = $1 && playlist= $2) RETURNING *;" ,[userId,playlist] );
+        const {user_id,playlist_number}=req.body;
+        const delPlaylist = await pool.query("DELETE FROM playlist WHERE (user_id = $1 AND playlist= $2) RETURNING *;" ,[user_id,playlist_number] );
         res.json(delPlaylist.rows);
     } catch (err) {
         console.error(err.message);
