@@ -1,38 +1,38 @@
 const express = require('express');
 const app = express();
-// const cors = require('cors');
+const cors = require('cors');
 const pool = require('./pool');
 
 //middleware
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
-app.use((req, res, next) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Headers', '*');
-    res.set('Access-Control-Allow-Methods', '*');
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-    return;
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     res.set('Access-Control-Allow-Origin', '*');
+//     res.set('Access-Control-Allow-Headers', '*');
+//     res.set('Access-Control-Allow-Methods', '*');
+//     if (req.method === 'OPTIONS') {
+//         res.status(200).end();
+//     return;
+//     }
+//     next();
+// });
 const Port = process.env.PORT || 5000 ;
 
-// pool.connect({
-//     host : 'localhost',
-//     port : '5432',
-//     database : 'music-pro-x',
-//     user : 'postgres',
-//     password : 'rohitkk432'
-// })
-
 pool.connect({
-    host : 'ec2-54-164-22-242.compute-1.amazonaws.com',
+    host : 'localhost',
     port : '5432',
-    database : 'd5pf8caf9got1o',
-    user : 'atlivokrvturux',
-    password : '18a3568fd59789477f17ba712eafe0188a34fce20e605f6f80720b39a41be34e'
+    database : 'music-pro-x',
+    user : 'postgres',
+    password : 'rohitkk432'
 })
+
+// pool.connect({
+//     host : 'ec2-54-164-22-242.compute-1.amazonaws.com',
+//     port : '5432',
+//     database : 'd5pf8caf9got1o',
+//     user : 'atlivokrvturux',
+//     password : '18a3568fd59789477f17ba712eafe0188a34fce20e605f6f80720b39a41be34e'
+// })
 
 //Routes
 
