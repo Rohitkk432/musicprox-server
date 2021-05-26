@@ -6,6 +6,11 @@ const pool = require('./pool');
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(function(req,res,next){
+    res.header('Access-Control-Allow-Origin','*');
+    res.header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-type, Accept')
+    next();
+});
 
 const Port = process.env.PORT || 5000 ;
 
