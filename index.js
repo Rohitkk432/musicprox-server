@@ -59,6 +59,15 @@ app.get('/songs',async (req,res)=>{
     }
 });
 
+app.post('/playlistQueue',async(req,res)=>{
+    try {
+        const {user_id,playlist_number}=req.body;
+        const newSong = await pool.query("INSERT INTO queue (user_id,song_id)SELECT user_id , song_id FROM (SELECT user_id, song_id ,title ,singer,duration,imgpath,audiopath,playlist_number FROM  (SELECT * FROM playlist WHERE (user_id = $1 AND playlist_number=$2)) AS userplaylist JOIN songs ON songs.id = userplaylist.song_id) AS playlist",[user_id,playlist_number]);
+        res.json(newSong.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 //-------------------------------------------------------------------------------------------------//
 
@@ -127,7 +136,7 @@ app.delete('/queue/:userId',async (req,res)=>{
 app.get('/liked/:userId',async (req,res)=>{
     try {
         const {userId}=req.params;
-        const liked = await pool.query("SELECT song_id ,title ,singer,duration,imgpath,audiopath FROM  (SELECT * FROM queue WHERE user_id = $1) AS userliked JOIN songs ON songs.id = userliked.song_id;" ,[userId]);
+        const liked = await pool.query("SELECT song_id ,title ,singer,duration,imgpath,audiopath FROM  (SELECT * FROM liked WHERE user_id = $1) AS userliked JOIN songs ON songs.id = userliked.song_id;" ,[userId]);
         res.json(liked.rows);
     } catch (err) {
         console.error(err.message);
@@ -185,7 +194,7 @@ app.delete('/liked/:userId',async (req,res)=>{
 app.get('/playlist/:user_id/:playlist_number',async (req,res)=>{
     try {
         const {user_id,playlist_number}=req.params;
-        const playlist = await pool.query("SELECT song_id ,title ,singer,duration,imgpath,audiopath FROM  (SELECT * FROM playlist WHERE (user_id = $1 AND playlist_number=$2)) AS userplaylist JOIN songs ON songs.id = userplaylist.song_id;" ,[user_id,playlist_number]);
+        const playlist = await pool.query("SELECT user_id, song_id ,title ,singer,duration,imgpath,audiopath,playlist_number FROM  (SELECT * FROM playlist WHERE (user_id = $1 AND playlist_number=$2)) AS userplaylist JOIN songs ON songs.id = userplaylist.song_id;" ,[user_id,playlist_number]);
         res.json(playlist.rows);
     } catch (err) {
         console.error(err.message);
@@ -229,7 +238,7 @@ app.delete('/playlist',async (req,res)=>{
 app.delete('/playlist/full',async (req,res)=>{
     try {
         const {user_id,playlist_number}=req.body;
-        const delPlaylist = await pool.query("DELETE FROM playlist WHERE (user_id = $1 AND playlist= $2) RETURNING *;" ,[user_id,playlist_number] );
+        const delPlaylist = await pool.query("DELETE FROM playlist WHERE (user_id = $1 AND playlist_number= $2) RETURNING *;" ,[user_id,playlist_number] );
         res.json(delPlaylist.rows);
     } catch (err) {
         console.error(err.message);
