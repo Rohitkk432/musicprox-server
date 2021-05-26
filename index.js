@@ -6,12 +6,16 @@ const pool = require('./pool');
 //middleware
 // app.use(cors());
 app.use(express.json());
-// app.use(function(req,res,next){
-//     res.header('Access-Control-Allow-Origin','*');
-//     res.header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-type, Accept')
-//     next();
-// });
-
+app.use((req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Headers', '*');
+    res.set('Access-Control-Allow-Methods', '*');
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+    return;
+    }
+    next();
+});
 const Port = process.env.PORT || 5000 ;
 
 // pool.connect({
