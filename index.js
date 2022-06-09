@@ -56,7 +56,12 @@ app.post('/users',async (req,res)=>{
     try {
         const {email}=req.body;
         const newUser = await pool.query("INSERT INTO users (email) VALUES ($1) RETURNING *;",[email]);
-        res.json(newUser.rows[0]);
+        if(newUser.rows===[]){
+            res.json(undefined)
+        }
+        else{
+            res.json(newUser.rows[0]);
+        }
     } catch (err) {
         console.error(err.message);
     }
