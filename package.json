@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"nodemon index",
-    "start":"node index"
+    "dev": "nodemon index",
+    "start": "node index"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Rohitkk432/musicprox-server#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0"
