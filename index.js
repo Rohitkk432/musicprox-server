@@ -18,21 +18,21 @@ app.use(express.json());
 // });
 const Port = process.env.PORT || 5000 ;
 
-pool.connect({
-    host : 'localhost',
-    port : '5432',
-    database : 'music-pro-x',
-    user : 'postgres',
-    password : 'rohitkk432'
-})
-
 // pool.connect({
-//     host : 'ec2-54-164-22-242.compute-1.amazonaws.com',
+//     host : 'localhost',
 //     port : '5432',
-//     database : 'd5pf8caf9got1o',
-//     user : 'atlivokrvturux',
-//     password : '18a3568fd59789477f17ba712eafe0188a34fce20e605f6f80720b39a41be34e'
+//     database : 'music-pro-x',
+//     user : 'postgres',
+//     password : 'rohitkk432'
 // })
+
+pool.connect({
+    host : process.env.PG_HOST,
+    port : process.env.PG_PORT,
+    database : process.env.PG_DB,
+    user : process.env.PG_USER,
+    password : process.env.PG_PASSWORD
+})
 
 //Routes
 
